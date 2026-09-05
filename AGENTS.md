@@ -26,6 +26,12 @@ branch checked out as its own worktree at a path Neovim finds via `NVIM_APPNAME`
    ```
    Only Rust-specific changes are committed directly on `rust` (e.g. `lua/plugins/rust.lua`,
    Rust entries in `lazyvim.json`).
+
+   For a shared **plugin add**, `./propagate.sh` (run from the `main` worktree,
+   after committing) does this merge for every non-`main` worktree: merge,
+   auto-resolve the `lazy-lock.json` conflict, `:Lazy! install`, commit. It
+   aborts on any other conflict. It does not push, and does not handle version
+   bumps / removals — merge those by hand.
 3. **Never `git checkout <other-branch>` inside a worktree.** A branch is checked out in
    at most one worktree. Switching branches here corrupts the setup. Use the other
    worktree instead.
