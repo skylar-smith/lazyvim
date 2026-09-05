@@ -15,16 +15,20 @@ REPO="https://github.com/skylar-smith/lazyvim.git"
 MAIN_DIR="$HOME/.config/nvim"
 RUST_DIR="$HOME/.config/nvim-rust"
 
-say()  { printf '\033[1;36m>> %s\033[0m\n' "$*"; }
+say() { printf '\033[1;36m>> %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33m!! %s\033[0m\n' "$*"; }
-die()  { printf '\033[1;31mxx %s\033[0m\n' "$*" >&2; exit 1; }
+die() {
+  printf '\033[1;31mxx %s\033[0m\n' "$*" >&2
+  exit 1
+}
 
 # --- prereq checks -----------------------------------------------------------
 need() { command -v "$1" >/dev/null 2>&1 || die "missing required tool: $1"; }
 need git
 need nvim
-command -v cc >/dev/null 2>&1 || command -v gcc >/dev/null 2>&1 || command -v clang >/dev/null 2>&1 \
-  || die "no C compiler (cc/gcc/clang) - nvim-treesitter needs one"
+need lazygit
+command -v cc >/dev/null 2>&1 || command -v gcc >/dev/null 2>&1 || command -v clang >/dev/null 2>&1 ||
+  die "no C compiler (cc/gcc/clang) - nvim-treesitter needs one"
 
 for t in rg fd fzf; do
   command -v "$t" >/dev/null 2>&1 || warn "optional tool not found: $t (some pickers degrade)"
@@ -83,8 +87,8 @@ NVIM_APPNAME=nvim-rust nvim --headless \
 
 # --- verify --------------------------------------------------------------
 say "health summary (nvim-rust):"
-NVIM_APPNAME=nvim-rust nvim --headless "+checkhealth" +qa 2>&1 \
-  | grep -iE '\b(ERROR|WARNING)\b' | head -20 || true
+NVIM_APPNAME=nvim-rust nvim --headless "+checkhealth" +qa 2>&1 |
+  grep -iE '\b(ERROR|WARNING)\b' | head -20 || true
 
 cat <<EOF
 
