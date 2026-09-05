@@ -141,6 +141,7 @@ lua/plugins/
 lazyvim.json                 which LazyVim "extras" are enabled
 lazy-lock.json               pinned plugin commits (per branch)
 bootstrap.sh                 fresh-machine setup
+propagate.sh                 merge a shared main change into every other profile
 ```
 
 ### What the `rust` branch adds over `main`
@@ -185,17 +186,34 @@ match another machine.
 
 `:LazyExtras` — the UI writes `lazyvim.json`. Commit the change.
 
-### Propagate a shared change from `main` into `rust`
+### Propagate a shared change from `main` into every other profile
+
+After committing a shared change (a new plugin under `lua/plugins/`, a
+`lazyvim.json` extra) on `main`:
+
+```sh
+cd ~/.config/nvim
+./propagate.sh
+```
+
+`propagate.sh` loops **every** worktree except `main` (today just `rust`, plus any
+profile you add later). For each it merges `main`, auto-resolves the
+`lazy-lock.json` conflict, runs `:Lazy! install` in that profile, and commits the
+finished merge. Any conflict outside `lazy-lock.json` aborts that profile's merge
+and stops the script — resolve that branch by hand. It does not push, and a new
+Mason/treesitter dependency still has to be added to `bootstrap.sh` yourself.
+
+For a version bump or a plugin removal (which `:Lazy! install` will not pick up),
+or a single fix, do it by hand instead:
 
 ```sh
 cd ~/.config/nvim-rust
-git merge main            # or: git rebase main
+git merge main            # or: git cherry-pick <sha>
+nvim   # :Lazy sync / :Lazy clean as needed, then commit lazy-lock.json
 ```
 
-Commits on `main` do **not** reach `rust` automatically — branches are independent
-pointers. Merge (or `git cherry-pick <sha>` for a single fix) when a change is relevant
-to the profile. Conflicts are possible where the branches touched the same lines; resolve
-once.
+Commits on `main` do **not** reach other branches automatically — branches are
+independent pointers.
 
 ### Push
 
