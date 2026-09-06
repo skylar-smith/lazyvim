@@ -4,3 +4,9 @@
 vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", {
   desc = "Markdown Toggle Preview",
 })
+
+-- window resize
+vim.keymap.set("n", "<leader>w<", "<C-w>5<", { desc = "Decrease Width", remap = true })
+vim.keymap.set("n", "<leader>w>", "<C-w>5>", { desc = "Increase Width", remap = true })
+vim.keymap.set("n", "<leader>w-", "<C-w>5-", { desc = "Decrease Height", remap = true })
+vim.keymap.set("n", "<leader>w+", "<C-w>5+", { desc = "Increase Height", remap = true })
