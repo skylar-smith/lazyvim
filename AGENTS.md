@@ -70,12 +70,12 @@ Headless gotcha: Mason and `nvim-treesitter` (main branch) install **asynchronou
 and are killed when headless nvim exits. Force-load the plugin, start the install, then
 `-c "sleep <n>"` before `qa`. See `bootstrap.sh` for the working incantation.
 
-## 99 plugin (AI assistant in-editor)
+## codecompanion (AI assistant in-editor)
 
-`lua/plugins/99.lua`. Pulls context from `AGENTS.md` / `AGENT.md` / `CLAUDE.md` found
-from the edited file up to cwd. Backend/model set in that file (`ollama/qwen3-coder`);
-needs `opencode` + `ollama` running. This is unrelated to how you (an external agent)
-edit the repo — it is a feature of the running editor.
+`lua/plugins/ai.lua`. Chat adapter: `ollama` (HTTP, model `qwen3-coder`) — needs `ollama`
+running, no `opencode`. `acp.claude_code` adapter available for Claude Code, using
+`CLAUDE_CODE_OAUTH_TOKEN` env var. Unrelated to how you (an external agent) edit the
+repo — it is a feature of the running editor.
 
 ## Do not
 
